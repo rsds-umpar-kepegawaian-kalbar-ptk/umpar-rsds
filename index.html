@@ -602,68 +602,6 @@ a{
   font-size:13px;
 }
 
-/* PROFIL */
-.profil-card{
-  background:#fff;
-  border-radius:20px;
-  padding:18px;
-  border:1px solid var(--line);
-  box-shadow:0 5px 16px rgba(16,24,40,.04);
-}
-
-.profile-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-.profile-item{
-  padding:13px 14px;
-  border-radius:14px;
-  background:var(--surface-2);
-  border:1px solid #eef1f4;
-}
-
-.profile-label{
-  color:var(--muted);
-  font-size:11px;
-  font-weight:750;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  margin-bottom:4px;
-}
-
-.profile-value{
-  font-size:13px;
-  font-weight:650;
-  overflow-wrap:anywhere;
-}
-
-.profile-note{
-  margin-top:14px;
-  padding:12px 13px;
-  border-radius:13px;
-  background:#fff4f2;
-  color:var(--danger);
-  font-size:12px;
-  line-height:1.5;
-}
-
-.update-btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:12px;
-  min-height:44px;
-  padding:10px 14px;
-  background:var(--primary);
-  color:#fff;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:800;
-  font-size:13px;
-}
-
 /* SIDEBAR DESKTOP */
 @media (min-width:1024px){
   .wrapper{
@@ -815,6 +753,34 @@ a{
     border-bottom:none;
   }
 }
+
+/* Mobile-first, two-page navigation */
+.slider{display:block;overflow:visible}.slide{min-width:0}
+.welcome{font-size:22px}.tabs{position:sticky;top:8px;z-index:20;overflow:visible;background:#fff}
+.tab{min-height:48px;flex:1;font-size:13px}.tab.active{background:var(--primary);color:white}
+.overview{padding:22px;border-radius:22px;background:linear-gradient(125deg,#103d64,#176f90);color:white;margin-bottom:12px}
+.overview-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#bde4ef}
+.overview h1{font-size:24px;letter-spacing:-.6px;margin:8px 0}
+.overview p{font-size:13px;line-height:1.6;color:#e1f0f7;max-width:350px}
+.overview-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px;font-size:12px}
+.overview button{min-height:44px;padding:8px 12px;border:1px solid #ffffff50;border-radius:12px;color:white;background:#ffffff16;font-weight:700}
+.refresh-status{font-size:11px;color:var(--muted);margin:0 2px 12px}
+.record-list{display:grid;gap:14px}.record-card{background:white;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 5px 18px #10284005;min-width:0}
+.record-meta{display:flex;justify-content:space-between;gap:12px;font-size:10px;font-weight:750;letter-spacing:.04em;color:var(--muted);margin-bottom:10px}
+.record-card h2{font-size:18px;line-height:1.4;overflow-wrap:anywhere;letter-spacing:-.3px}
+.status-label{font-size:12px;color:var(--primary);margin-top:8px;overflow-wrap:anywhere}
+.note-box{padding:14px;margin-top:15px;background:#f6f8fa;border-radius:12px;border-left:3px solid #d4dde5}
+.note-box.has-note{background:#fff8e9;border-left-color:#e6ac35}
+.note-label{font-weight:800;font-size:11px;color:#566575;margin-bottom:7px}.has-note .note-label{color:#885c14}
+.note-box p{font-size:14px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}.note-box p+p{margin-top:8px}
+.muted,.no-file{color:var(--muted)}.no-file{font-size:12px;padding-top:14px}
+.file-button{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:48px;padding:13px 14px;background:#eaf4fb;color:#0f4c81;border:1px solid #d6e8f5;border-radius:12px;text-decoration:none;font-size:13px;font-weight:800;margin-top:12px;overflow-wrap:anywhere}
+.file-button span{margin-left:auto}.file-button small{font-size:11px;font-weight:400;max-width:100%;overflow-wrap:anywhere}
+.empty-state p{line-height:1.6;margin-top:10px}button:disabled{opacity:.65;cursor:wait}button:focus-visible,a:focus-visible{outline:3px solid #28a7d4;outline-offset:3px}
+.message-box{max-height:none}.message-card{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:640px){.wrapper{padding:16px 12px calc(24px + env(safe-area-inset-bottom))}.record-card{padding:16px}.topbar{margin-bottom:18px}.overview{padding:20px}.overview h1{font-size:23px}.tab{padding:10px 7px}.menu{min-height:138px}.menu-title{line-height:1.4}}
+@media(min-width:1024px){.record-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 </style>
 </head>
 
@@ -837,7 +803,7 @@ a{
       <div class="login-body">
         <div class="login-heading">Masuk ke portal</div>
         <div class="login-note">
-          Masukkan NIP / NIK untuk menampilkan layanan, pengajuan, arsip, dan profil pegawai.
+          Masukkan NIP / NIK untuk menampilkan pengajuan, catatan, dan berkas Anda.
           Data pengguna tidak disimpan di browser.
         </div>
 
@@ -876,10 +842,8 @@ a{
         </div>
 
         <h3>Menu Utama</h3>
-        <button class="sidebar-item active" onclick="goSlide(0)">Layanan</button>
-        <button class="sidebar-item" onclick="goSlide(1)">Pengajuan</button>
-        <button class="sidebar-item" onclick="goSlide(2)">Arsip Dokumen</button>
-        <button class="sidebar-item" onclick="goSlide(3)">Profil</button>
+        <button class="sidebar-item active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
+<button class="sidebar-item" onclick="goSlide(1)">Layanan</button>
 
         <button class="switch-user" onclick="logout()">Ganti NIP / NIK</button>
       </aside>
@@ -904,17 +868,13 @@ a{
         <div id="messageContainer"></div>
 
         <div class="tabs">
-          <button class="tab active" onclick="goSlide(0)">Layanan</button>
-          <button class="tab" onclick="goSlide(1)">Pengajuan</button>
-          <button class="tab" onclick="goSlide(2)">Arsip</button>
-          <button class="tab" onclick="goSlide(3)">Profil</button>
+          <button class="tab active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
+<button class="tab" onclick="goSlide(1)">Layanan</button>
         </div>
 
         <div class="slider" id="slider">
-          <section class="slide" id="layananSlide"></section>
           <section class="slide" id="riwayatSlide"></section>
-          <section class="slide" id="arsipSlide"></section>
-          <section class="slide" id="profilSlide"></section>
+          <section class="slide hidden" id="layananSlide"></section>
         </div>
       </main>
 
@@ -957,6 +917,8 @@ function setLoading(state){
 
   loading.classList.toggle("show", state);
   btn.disabled = state;
+  const refresh = document.getElementById("refreshBtn");
+  if(refresh){refresh.disabled = state; refresh.textContent = state ? "Memuat…" : "↻ Perbarui";}
   btn.textContent = state ? "Memproses..." : "Masuk";
 }
 
@@ -1026,7 +988,8 @@ async function fetchData(nip){
     activeRequest.abort();
   }
 
-  activeRequest = new AbortController();
+  const request = new AbortController();
+  activeRequest = request;
   setLoading(true);
 
   try{
@@ -1048,16 +1011,18 @@ async function fetchData(nip){
         nip:nip,
         _ts:Date.now()
       }),
-      signal:activeRequest.signal
+      signal:request.signal
     });
 
+    if(!response.ok) throw new Error("Server belum dapat dihubungi. Silakan coba kembali.");
     const raw = await response.text();
+    if(activeRequest !== request) return;
 
     let result;
     try{
       result = JSON.parse(raw);
     }catch(err){
-      console.error("Respons server:", raw);
+      console.error("Respons server tidak valid");
       throw new Error("Respons server tidak valid. Silakan coba lagi.");
     }
 
@@ -1077,6 +1042,7 @@ async function fetchData(nip){
 
     renderAll();
     goSlide(0);
+    document.getElementById("refreshStatus").textContent = "Diperbarui " + new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
 
     window.scrollTo({top:0,behavior:"auto"});
   }catch(err){
@@ -1085,8 +1051,7 @@ async function fetchData(nip){
     console.error(err);
     alert(err.message || "Gagal terhubung ke server. Silakan coba kembali.");
   }finally{
-    setLoading(false);
-    activeRequest = null;
+    if(activeRequest === request){setLoading(false); activeRequest = null;}
   }
 }
 
@@ -1097,8 +1062,7 @@ function renderAll(){
   renderPesan();
   renderLayanan();
   renderRiwayat();
-  renderArsip();
-  renderProfil();
+
 }
 
 /* =========================================================
@@ -1121,7 +1085,7 @@ function renderPesan(){
         </div>
         <div class="message-count">${pesan.length}</div>
       </button>
-      <div class="message-box" id="msgBox">
+      <div class="message-box show" id="msgBox">
   `;
 
   pesan.forEach(m=>{
@@ -1154,53 +1118,53 @@ function renderLayanan(){
     </div>
 
     <div class="grid">
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/pangkat-rsds-aktive/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/pangkat-rsds-aktive/')">
         <div class="menu-icon">👤</div>
         <div class="menu-title">Pangkat</div>
         <div class="menu-desc">Layanan pengajuan pangkat.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/Gaji-Berkala-RSDS-Soedarso/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/Gaji-Berkala-RSDS-Soedarso/')">
         <div class="menu-icon">💰</div>
         <div class="menu-title">Gaji Berkala</div>
         <div class="menu-desc">Pengajuan gaji berkala.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/Ukom-Rsds/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/Ukom-Rsds/')">
         <div class="menu-icon">📝</div>
         <div class="menu-title">UKOM</div>
         <div class="menu-desc">Layanan uji kompetensi.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/Jafung-D/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/Jafung-D/')">
         <div class="menu-icon">💼</div>
         <div class="menu-title">Jabatan Fungsional</div>
         <div class="menu-desc">Layanan jabatan fungsional.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantahsaputra94-jpg.github.io/Tampilan-Cuti-Umpar/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantahsaputra94-jpg.github.io/Tampilan-Cuti-Umpar/')">
         <div class="menu-icon">📅</div>
         <div class="menu-title">Cuti</div>
         <div class="menu-desc">Pengajuan layanan cuti.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://script.google.com/macros/s/AKfycbwqBTIpCs6qGOQJUioOHCftgomo9S_9dCA4TfwhsMR_SrdR2_svE0waIrisc3F325v3/exec')">
+      <button type="button" class="menu" onclick="openUrl('https://script.google.com/macros/s/AKfycbwqBTIpCs6qGOQJUioOHCftgomo9S_9dCA4TfwhsMR_SrdR2_svE0waIrisc3F325v3/exec')">
         <div class="menu-icon">🧮</div>
         <div class="menu-title">Angka Kredit</div>
         <div class="menu-desc">Layanan angka kredit.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/sip-sib/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/sip-sib/')">
         <div class="menu-icon">🪪</div>
         <div class="menu-title">SIP / SIB</div>
         <div class="menu-desc">Pengajuan SIP / SIB.</div>
-      </div>
+      </button>
 
-      <div class="menu" onclick="openUrl('https://rikoantah.github.io/slks-d/')">
+      <button type="button" class="menu" onclick="openUrl('https://rikoantah.github.io/slks-d/')">
         <div class="menu-icon">⭐</div>
         <div class="menu-title">SLKS</div>
         <div class="menu-desc">Layanan SLKS pegawai.</div>
-      </div>
+      </button>
     </div>
   `;
 }
@@ -1208,217 +1172,62 @@ function renderLayanan(){
 /* =========================================================
    RIWAYAT PENGAJUAN
 ========================================================= */
+function fieldKey(key){return String(key).toLowerCase().replace(/[^a-z0-9]/g, "");}
+function meaningful(value){return value != null && String(value).trim() !== "" && String(value).trim() !== "-";}
+function recordView(x){
+  const detail = x.detail || {};
+  const entries = Object.entries(detail);
+  const archive = String(x.sheet || "").toLowerCase().replace(/^data_/, "") === "arsip";
+  const find = names => entries.find(([k,v]) => names.includes(fieldKey(k)) && meaningful(v))?.[1];
+  const kind = find(["jenispengajuan", "jenislayanan", "jenisarsip"]);
+  const title = kind ? String(kind) : mapJudul(x.sheet, detail);
+  const notes = entries.filter(([k,v]) => /catatan|keterangan|pesan|alasan/.test(fieldKey(k)) && meaningful(v));
+  const status = find(["status", "statuspengajuan", "statusproses"]);
+  const date = find(["timestamp", "tanggalpengajuan", "tanggal", "waktu"]);
+  const links = [];
+  entries.forEach(([key,value]) => {
+    // Only complete HTTP(S) URLs become buttons; arbitrary text stays text.
+    const raw = String(value ?? "").trim();
+    try{
+      const url = new URL(raw);
+      if(!["https:","http:"].includes(url.protocol) || /\s/.test(raw)) return;
+      if(links.some(link => link.url === url.href)) return;
+      const folder = /\/folders\//i.test(url.pathname) || /folder/i.test(key);
+      links.push({url:url.href, label:folder ? "Buka Folder Berkas" : "Buka Berkas", key});
+    }catch(e){}
+  });
+  return {title, notes, status, date, links, archive};
+}
 function renderRiwayat(){
-  const riwayat = Array.isArray(globalData?.riwayat) ? globalData.riwayat : [];
-  const data = riwayat.filter(x=>x.sheet !== "data_arsip");
-
-  let html = `
-    <div class="section-head">
-      <div>
-        <div class="section-title">Riwayat Pengajuan</div>
-        <div class="section-subtitle">Data pengajuan pegawai yang tersimpan.</div>
-      </div>
+  const rows = (Array.isArray(globalData?.riwayat) ? globalData.riwayat : []).map(recordView);
+  document.getElementById("riwayatSlide").innerHTML = `
+    <div class="overview"><span class="overview-kicker">BERKAS SAYA</span>
+      <h1>Pengajuan &amp; Arsip</h1>
+      <p>Baca catatan pengajuan dan buka berkas Anda di sini.</p>
+      <div class="overview-bottom"><span>${rows.length} pengajuan / arsip</span><button onclick="refreshData()" id="refreshBtn">↻ Perbarui</button></div>
     </div>
-  `;
-
-  if(!data.length){
-    html += `<div class="empty-state">Belum ada pengajuan.</div>`;
-    document.getElementById("riwayatSlide").innerHTML = html;
-    return;
-  }
-
-  data.forEach(x=>{
-    const detail = x.detail || {};
-    const judul = mapJudul(x.sheet, detail);
-    const tanggal = detail.TIMESTAMP ? formatDate(detail.TIMESTAMP) : "";
-
-    html += `
-      <article class="riwayat-card">
-        <div class="riwayat-title">${safeText(judul)}</div>
-        ${tanggal ? `<div class="riwayat-date">${safeText(tanggal)}</div>` : ""}
-    `;
-
-    Object.entries(detail).forEach(([k,originalValue])=>{
-      const key = String(k);
-      const low = key.toLowerCase();
-
-      if(low === "nama" || low === "nip" || key === "TIMESTAMP") return;
-
-      let value = originalValue ?? "";
-
-      if(String(value).startsWith("http")){
-        html += `
-          <div>
-            <a href="${safeText(value)}" target="_blank" rel="noopener noreferrer" class="folder-link">
-              📂 Buka Folder
-            </a>
-          </div>
-        `;
-        return;
-      }
-
-      if(typeof value === "string" && value.includes("T") && value.includes("Z")){
-        value = formatDate(value);
-      }
-
-      html += `
-        <div class="detail-row">
-          <div class="detail-key">${safeText(key)}</div>
-          <div class="detail-val">${safeText(value || "-")}</div>
-        </div>
-      `;
-    });
-
-    html += `</article>`;
-  });
-
-  document.getElementById("riwayatSlide").innerHTML = html;
+    <div id="refreshStatus" role="status" class="refresh-status"></div>
+    ${rows.length ? `<div class="record-list">${rows.map(item => `
+      <article class="record-card">
+        <div class="record-meta"><span>${item.archive ? "ARSIP DOKUMEN" : "PENGAJUAN"}</span>${item.date ? `<time>${safeText(formatDate(item.date))}</time>` : ""}</div>
+        <h2>${safeText(item.title)}</h2>
+        ${item.status ? `<div class="status-label">Status: ${safeText(item.status)}</div>` : ""}
+        <div class="note-box ${item.notes.length ? "has-note" : ""}"><div class="note-label">Catatan ${item.archive ? "arsip" : "pengajuan"}</div>
+        ${item.notes.length ? item.notes.map(([key,value]) => `<p>${item.notes.length > 1 ? `<strong>${safeText(key)}: </strong>` : ""}${safeText(value)}</p>`).join("") : `<p class="muted">Belum ada catatan.</p>`}</div>
+        <div class="record-links">${item.links.length ? item.links.map(link => `<a class="file-button" href="${safeText(link.url)}" target="_blank" rel="noopener noreferrer">📂 ${safeText(link.label)}${item.links.length > 1 ? `<small>${safeText(link.key)}</small>` : ""}<span aria-hidden="true">↗</span></a>`).join("") : `<div class="no-file">Berkas belum tersedia di portal.</div>`}</div>
+      </article>`).join("")}</div>` : `<div class="empty-state"><strong>Belum ada pengajuan atau arsip</strong><p>Untuk membuat pengajuan, pilih layanan yang Anda perlukan.</p><button class="login-btn" onclick="goSlide(1)">Buka Layanan</button></div>`}`;
 }
-
-/* =========================================================
-   ARSIP
-========================================================= */
-function renderArsip(){
-  const riwayat = Array.isArray(globalData?.riwayat) ? globalData.riwayat : [];
-  const arsip = riwayat.filter(x=>x.sheet === "data_arsip");
-
-  let html = `
-    <div class="section-head">
-      <div>
-        <div class="section-title">Arsip Dokumen</div>
-        <div class="section-subtitle">Dokumen arsip pegawai yang tersedia.</div>
-      </div>
-    </div>
-  `;
-
-  if(!arsip.length){
-    html += `<div class="empty-state">Belum ada arsip.</div>`;
-    document.getElementById("arsipSlide").innerHTML = html;
-    return;
-  }
-
-  arsip.forEach(x=>{
-    const detail = x.detail || {};
-    const judul = mapJudul(x.sheet, detail);
-
-    let fileUrl = "";
-
-    Object.values(detail).forEach(val=>{
-      const value = String(val || "");
-      if(value.includes("drive.google.com/file")){
-        fileUrl = value;
-      }
-    });
-
-    let download = "";
-
-    if(fileUrl){
-      const match = fileUrl.match(/\/d\/(.*?)\//);
-      const fileId = match ? match[1] : null;
-
-      if(fileId){
-        const url = "https://drive.google.com/uc?export=download&id=" + encodeURIComponent(fileId);
-        download = `
-          <a href="${safeText(url)}" target="_blank" rel="noopener noreferrer" class="folder-link">
-            ⬇ Download
-          </a>
-        `;
-      }
-    }
-
-    html += `
-      <article class="riwayat-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-          <div class="riwayat-title">${safeText(judul)}</div>
-          <div>${download}</div>
-        </div>
-      </article>
-    `;
-  });
-
-  document.getElementById("arsipSlide").innerHTML = html;
+function refreshData(){
+  const nip = document.getElementById("nip").value.trim();
+  if(nip) fetchData(nip);
 }
-
-/* =========================================================
-   PROFIL
-========================================================= */
-function renderProfil(){
-  const p = globalData?.profile || {};
-  const entries = Object.entries(p);
-
-  let html = `
-    <div class="section-head">
-      <div>
-        <div class="section-title">Profil Pegawai</div>
-        <div class="section-subtitle">Informasi data kepegawaian yang tersedia.</div>
-      </div>
-    </div>
-
-    <div class="profil-card">
-      <div class="profile-grid">
-  `;
-
-  const nama = p.NAMA || p.nama || "-";
-  const nip = p.NIP || p.nip || "-";
-
-  html += `
-    <div class="profile-item">
-      <div class="profile-label">Nama</div>
-      <div class="profile-value">${safeText(nama)}</div>
-    </div>
-
-    <div class="profile-item">
-      <div class="profile-label">NIP</div>
-      <div class="profile-value">${safeText(nip)}</div>
-    </div>
-  `;
-
-  entries.forEach(([k,v])=>{
-    if(k.toLowerCase()==="nama" || k.toLowerCase()==="nip") return;
-
-    html += `
-      <div class="profile-item">
-        <div class="profile-label">${safeText(k)}</div>
-        <div class="profile-value">${safeText(v || "-")}</div>
-      </div>
-    `;
-  });
-
-  html += `
-      </div>
-
-      <div class="profile-note">
-        Jika ada data yang belum diperbarui, silakan kirimkan permohonan perubahan data.
-      </div>
-
-      <a href="#" class="update-btn" onclick="event.preventDefault()">
-        Permohonan Update Data
-      </a>
-    </div>
-  `;
-
-  document.getElementById("profilSlide").innerHTML = html;
-}
-
-/* =========================================================
-   NAVIGASI
-========================================================= */
 function goSlide(index){
-  const slider = document.getElementById("slider");
-  const maxIndex = 3;
-  const i = Math.max(0,Math.min(index,maxIndex));
-
-  slider.scrollTo({
-    left:i * slider.clientWidth,
-    behavior:"smooth"
-  });
-
-  document.querySelectorAll(".tab").forEach((el,idx)=>{
-    el.classList.toggle("active",idx===i);
-  });
-
-  document.querySelectorAll(".sidebar-item").forEach((el,idx)=>{
-    el.classList.toggle("active",idx===i);
+  const i = index === 1 ? 1 : 0;
+  document.querySelectorAll(".slide").forEach((el,idx) => el.classList.toggle("hidden",idx !== i));
+  document.querySelectorAll(".tab,.sidebar-item").forEach(el => {
+    const active = el.getAttribute("onclick") === `goSlide(${i})`;
+    el.classList.toggle("active",active);
+    el.setAttribute("aria-current",active ? "page" : "false");
   });
 }
 
@@ -1449,8 +1258,7 @@ function logout(){
   document.getElementById("messageContainer").innerHTML = "";
   document.getElementById("layananSlide").innerHTML = "";
   document.getElementById("riwayatSlide").innerHTML = "";
-  document.getElementById("arsipSlide").innerHTML = "";
-  document.getElementById("profilSlide").innerHTML = "";
+
   document.getElementById("namaUser").textContent = "";
   document.getElementById("nip").value = "";
 
