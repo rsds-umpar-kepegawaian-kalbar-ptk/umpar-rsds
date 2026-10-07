@@ -707,6 +707,19 @@ a{
 @media(max-width:640px){.wrapper{padding:16px 12px calc(24px + env(safe-area-inset-bottom))}.record-card{padding:16px}.topbar{margin-bottom:18px}.overview{padding:20px}.overview h1{font-size:23px}.tab{padding:10px 7px}.menu{min-height:138px}.menu-title{line-height:1.4}}
 @media(min-width:1024px){.record-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
+
+.table-tools{display:flex;gap:10px;margin:16px 0 10px;align-items:end}.search-label{flex:1;min-width:0}.table-tools label{font-size:11px;font-weight:700;color:var(--muted)}
+.table-tools input,.table-tools select{display:block;width:100%;margin-top:6px;min-height:46px;padding:10px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--text);font:inherit;font-size:16px}.filter-label{width:112px;flex-shrink:0}
+.result-count{font-size:11px;color:var(--muted);margin-bottom:10px}.table-wrap{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:white}
+.records-table{width:100%;border-collapse:collapse;table-layout:fixed;text-align:left;font-size:13px}.col-no{width:6%}.col-kind{width:30%}.col-note{width:44%}.col-folder{width:20%}
+.records-table th{background:#edf3f8;color:#43566b;padding:14px 12px;font-size:12px}.records-table td{vertical-align:top;padding:16px 12px;border-top:1px solid var(--line);overflow-wrap:anywhere;line-height:1.6}.records-table tbody tr:nth-child(even){background:#fbfcfe}.row-number{color:var(--muted)}
+.type-badge{display:inline-block;padding:3px 7px;font-size:10px;font-weight:800;border-radius:6px;background:#eaf2ff;color:#2255a3;margin-bottom:7px}.archive-badge{background:#dcf4e9;color:#116345}
+.table-title,.archive-title{display:block;font-weight:750;line-height:1.5}.archive-title{color:#116c55;text-decoration:underline;text-underline-offset:3px}.archive-title small{display:block;font-size:10px;font-weight:500;margin-top:4px}.table-date{font-size:10px;color:var(--muted);margin-top:7px}
+.table-note{white-space:pre-wrap;background:#fff8e9;border-left:2px solid #e6ac35;padding:7px 8px;border-radius:4px}.table-note+.table-note{margin-top:8px}.table-status{font-size:11px;font-weight:700;margin-bottom:7px;color:var(--primary)}
+.table-open{display:block;text-align:center;min-height:46px;padding:8px 4px;background:#0f4c81;color:#fff;text-decoration:none;border-radius:9px;font-size:12px;font-weight:750;margin-bottom:5px}.table-open small{display:block;font-size:10px;font-weight:400}.link-caption{display:block;font-size:10px;color:var(--muted);margin-bottom:12px}.unavailable{font-size:11px;color:var(--muted)}
+.table-empty{text-align:center;padding:30px 16px!important;color:var(--muted)}.empty-service{display:block;margin:12px auto 0;border:none;border-radius:10px;padding:12px 18px;background:var(--primary);color:#fff}
+@media(max-width:640px){.records-table{font-size:12px}.records-table th{padding:12px 5px;font-size:11px}.records-table td{padding:12px 5px}.col-no{width:8%}.col-kind{width:29%}.col-note{width:41%}.col-folder{width:22%}.table-note{padding:6px}.type-badge{font-size:9px;padding:3px 4px}.table-tools{gap:8px}.overview h1{font-size:22px}}
+
 </style>
 </head>
 
@@ -1082,24 +1095,42 @@ function recordView(x){
   });
   return {title, notes, status, date, links, archive};
 }
+function getVisibleRecords(query = "", category = "all"){
+  const term = query.trim().toLocaleLowerCase("id-ID");
+  return (Array.isArray(globalData?.riwayat) ? globalData.riwayat : []).map(recordView).filter(item => {
+    const type = item.archive ? "arsip" : "pengajuan";
+    const search = [type,item.title,item.status,...item.notes.map(note => note[1])].join(" ").toLocaleLowerCase("id-ID");
+    return (category === "all" || category === type) && (!term || search.includes(term));
+  });
+}
 function renderRiwayat(){
-  const rows = (Array.isArray(globalData?.riwayat) ? globalData.riwayat : []).map(recordView);
+  const total = getVisibleRecords().length;
   document.getElementById("riwayatSlide").innerHTML = `
     <div class="overview"><span class="overview-kicker">BERKAS SAYA</span>
       <h1>Pengajuan &amp; Arsip</h1>
-      <p>Baca catatan pengajuan dan buka berkas Anda di sini.</p>
-      <div class="overview-bottom"><span>${rows.length} pengajuan / arsip</span><button onclick="refreshData()" id="refreshBtn">↻ Perbarui</button></div>
+      <p>Lihat catatan pengajuan. Klik nama arsip atau tombol Buka untuk melihat berkas.</p>
+      <div class="overview-bottom"><span>${total} pengajuan / arsip</span><button onclick="refreshData()" id="refreshBtn">↻ Perbarui</button></div>
     </div>
     <div id="refreshStatus" role="status" class="refresh-status"></div>
-    ${rows.length ? `<div class="record-list">${rows.map(item => `
-      <article class="record-card">
-        <div class="record-meta"><span>${item.archive ? "ARSIP DOKUMEN" : "PENGAJUAN"}</span>${item.date ? `<time>${safeText(formatDate(item.date))}</time>` : ""}</div>
-        <h2>${safeText(item.title)}</h2>
-        ${item.status ? `<div class="status-label">Status: ${safeText(item.status)}</div>` : ""}
-        <div class="note-box ${item.notes.length ? "has-note" : ""}"><div class="note-label">Catatan ${item.archive ? "arsip" : "pengajuan"}</div>
-        ${item.notes.length ? item.notes.map(([key,value]) => `<p>${item.notes.length > 1 ? `<strong>${safeText(key)}: </strong>` : ""}${safeText(value)}</p>`).join("") : `<p class="muted">Belum ada catatan.</p>`}</div>
-        <div class="record-links">${item.links.length ? item.links.map(link => `<a class="file-button" href="${safeText(link.url)}" target="_blank" rel="noopener noreferrer">📂 ${safeText(link.label)}${item.links.length > 1 ? `<small>${safeText(link.key)}</small>` : ""}<span aria-hidden="true">↗</span></a>`).join("") : `<div class="no-file">Berkas belum tersedia di portal.</div>`}</div>
-      </article>`).join("")}</div>` : `<div class="empty-state"><strong>Belum ada pengajuan atau arsip</strong><p>Untuk membuat pengajuan, pilih layanan yang Anda perlukan.</p><button class="login-btn" onclick="goSlide(1)">Buka Layanan</button></div>`}`;
+    <div class="table-tools"><label class="search-label" for="recordSearch">Cari pengajuan atau arsip<input id="recordSearch" type="search" placeholder="Ketik nama atau catatan…" oninput="renderRecordRows()"></label>
+    <label class="filter-label" for="recordCategory">Jenis<select id="recordCategory" onchange="renderRecordRows()"><option value="all">Semua</option><option value="pengajuan">Pengajuan</option><option value="arsip">Arsip</option></select></label></div>
+    <p class="result-count" id="recordCount" role="status"></p>
+    <div class="table-wrap"><table class="records-table" aria-label="Daftar pengajuan dan arsip"><colgroup><col class="col-no"><col class="col-kind"><col class="col-note"><col class="col-folder"></colgroup><thead><tr><th scope="col">No</th><th scope="col">Jenis</th><th scope="col">Catatan</th><th scope="col">Folder</th></tr></thead><tbody id="recordRows"></tbody></table></div>`;
+  renderRecordRows();
+}
+function renderRecordRows(){
+  const query = document.getElementById("recordSearch")?.value || "";
+  const category = document.getElementById("recordCategory")?.value || "all";
+  const rows = getVisibleRecords(query,category);
+  document.getElementById("recordCount").textContent = rows.length + " data ditampilkan";
+  document.getElementById("recordRows").innerHTML = rows.length ? rows.map((item,index) => {
+    const primary = item.links.find(link => /\/file\/|docs\.google\.com/.test(link.url)) || item.links[0];
+    return `<tr><td class="row-number">${index+1}</td><td><span class="type-badge ${item.archive ? "archive-badge" : ""}">${item.archive ? "Arsip" : "Pengajuan"}</span>
+      ${item.archive && primary ? `<a class="archive-title" href="${safeText(primary.url)}" target="_blank" rel="noopener noreferrer">${safeText(item.title)} <span aria-hidden="true">↗</span><small>Klik untuk buka</small></a>` : `<div class="table-title">${safeText(item.title)}</div>`}
+      ${item.date ? `<div class="table-date">${safeText(formatDate(item.date))}</div>` : ""}</td>
+      <td>${item.status ? `<div class="table-status">Status: ${safeText(item.status)}</div>` : ""}${item.notes.length ? item.notes.map(([key,value]) => `<p class="table-note">${item.notes.length > 1 ? `<strong>${safeText(key)}: </strong>` : ""}${safeText(value)}</p>`).join("") : `<span class="muted">Belum ada catatan.</span>`}</td>
+      <td>${item.links.length ? item.links.map(link => `<a class="table-open" href="${safeText(link.url)}" target="_blank" rel="noopener noreferrer" aria-label="${safeText(link.label + ': ' + item.title)}">Buka ↗<small>${link.label.includes("Folder") ? "Folder" : "Berkas"}</small></a>${item.links.length > 1 ? `<span class="link-caption">${safeText(link.key)}</span>` : ""}`).join("") : `<span class="unavailable">Belum tersedia</span>`}</td></tr>`;
+  }).join("") : `<tr><td colspan="4" class="table-empty">${getVisibleRecords().length ? "Tidak ada data yang cocok. Coba kata lain atau pilih Semua." : `Belum ada pengajuan atau arsip.<button class="empty-service" onclick="goSlide(1)">Buka Layanan</button>`}</td></tr>`;
 }
 function refreshData(){
   const nip = document.getElementById("nip").value.trim();
