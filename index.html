@@ -720,6 +720,19 @@ a{
 .table-empty{text-align:center;padding:30px 16px!important;color:var(--muted)}.empty-service{display:block;margin:12px auto 0;border:none;border-radius:10px;padding:12px 18px;background:var(--primary);color:#fff}
 @media(max-width:640px){.records-table{font-size:12px}.records-table th{padding:12px 5px;font-size:11px}.records-table td{padding:12px 5px}.col-no{width:8%}.col-kind{width:29%}.col-note{width:41%}.col-folder{width:22%}.table-note{padding:6px}.type-badge{font-size:9px;padding:3px 4px}.table-tools{gap:8px}.overview h1{font-size:22px}}
 
+
+/* Compact application shell */
+body{background:#f5f7fa}.wrapper{width:100%;max-width:1440px;padding:0 12px 20px}.dashboard-layout{display:block}.main-content{width:100%}
+.app-toolbar{display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:50;background:#f5f7faf5;padding:10px 0;border-bottom:1px solid #e0e7ef;margin-bottom:8px;backdrop-filter:blur(12px)}
+.app-toolbar .tabs{display:flex;position:static;flex:1;margin:0;padding:4px;box-shadow:none;border-radius:14px;background:#e7edf4;border:none}.tab{min-height:44px;font-size:13px}.tab.active{background:white;color:#124d7d;box-shadow:0 2px 6px #20375112}
+.menu-btn{width:40px;height:44px;box-shadow:none;background:transparent;border:none}.dropdown{top:48px;width:205px}.dropdown button{min-height:46px}
+.identity-panel{padding:16px;background:#eaf2f9;border-radius:14px;margin:12px 0}.identity-panel .welcome{font-size:18px}.identity-panel .nama-user{font-size:13px}
+.table-tools{margin:10px 0 4px}.table-tools input,.table-tools select{min-height:44px;margin-top:5px;border-radius:10px}.table-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;margin-bottom:4px}.table-summary .result-count{margin:0}.refresh-compact{border:0;background:transparent;color:#195988;font-weight:700;font-size:12px;min-height:44px;padding:0 8px}
+.table-wrap{border-radius:12px;box-shadow:0 2px 10px #213d5804}.records-table th{padding:12px 10px;background:#eaf0f6}.records-table td{padding:13px 10px}.table-title{font-weight:700}.table-note{background:#fff9eb}.table-open{background:#166e68;border-radius:9px;min-height:46px}.col-no{width:5%}.col-kind{width:28%}.col-note{width:51%}.col-folder{width:16%}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.login-shell{min-height:100dvh}.section-head{margin-top:14px}
+@media(max-width:640px){.wrapper{padding:0 8px calc(12px + env(safe-area-inset-bottom))}.app-toolbar{padding-top:calc(8px + env(safe-area-inset-top));gap:2px}.tab{padding:9px 6px}.records-table th,.records-table td{padding:11px 5px}.col-no{width:8%}.col-kind{width:28%}.col-note{width:43%}.col-folder{width:21%}.table-tools label{font-size:10px}.filter-label{width:100px}.table-title{font-size:12px}.table-note{padding:5px;border-left-width:2px}}
+
 </style>
 </head>
 
@@ -774,40 +787,27 @@ a{
   <section id="dashboard">
     <div class="dashboard-layout">
 
-      <aside class="sidebar" id="sidebarMenu">
-        <div class="sidebar-brand">
-          <strong>Kepegawaian RSDS</strong>
-          <span>Portal layanan pegawai</span>
-        </div>
 
-        <h3>Menu Utama</h3>
-        <button class="sidebar-item active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
-<button class="sidebar-item" onclick="goSlide(1)">Layanan</button>
-
-        <button class="switch-user" onclick="logout()">Ganti NIP / NIK</button>
-      </aside>
 
       <main class="main-content">
-        <div class="topbar">
-          <div class="header">
-            <div class="eyebrow">Portal Kepegawaian</div>
-            <div class="welcome">Selamat Datang</div>
-            <div class="nama-user" id="namaUser"></div>
-          </div>
-
+        <div class="app-toolbar">
+          <nav class="tabs" aria-label="Menu utama">
+            <button class="tab active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
+            <button class="tab" onclick="goSlide(1)">Layanan</button>
+          </nav>
           <div class="top-menu">
-            <button class="menu-btn" onclick="toggleDropdown()" aria-label="Menu">⋮</button>
+            <button class="menu-btn" onclick="toggleDropdown()" aria-label="Menu akun">⋮</button>
             <div class="dropdown" id="dropdown">
+              <button id="identityToggle" onclick="toggleIdentity()" aria-expanded="false" aria-controls="identityPanel">Tampilkan identitas</button>
               <button onclick="logout()">Ganti NIP / NIK</button>
-              <button onclick="logout()">Keluar Aplikasi</button>
+              <button onclick="logout()">Keluar</button>
             </div>
           </div>
         </div>
-
-
-        <div class="tabs">
-          <button class="tab active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
-<button class="tab" onclick="goSlide(1)">Layanan</button>
+        <div class="identity-panel hidden" id="identityPanel">
+          <div class="eyebrow">Portal Kepegawaian</div>
+          <div class="welcome">Selamat Datang</div>
+          <div class="nama-user" id="namaUser"></div>
         </div>
 
         <div class="slider" id="slider">
@@ -1077,7 +1077,7 @@ function recordView(x){
   const archive = String(x.sheet || "").toLowerCase().replace(/^data_/, "") === "arsip";
   const find = names => entries.find(([k,v]) => names.includes(fieldKey(k)) && meaningful(v))?.[1];
   const kind = find(["jenispengajuan", "jenislayanan", "jenisarsip"]);
-  const title = kind ? String(kind) : mapJudul(x.sheet, detail);
+  const title = (kind ? String(kind) : mapJudul(x.sheet, detail)).replace(/^(Pengajuan|Arsip)\s+/i, "");
   const notes = entries.filter(([k,v]) => /catatan|keterangan|pesan|alasan/.test(fieldKey(k)) && meaningful(v));
   const status = find(["status", "statuspengajuan", "statusproses"]);
   const date = find(["timestamp", "tanggalpengajuan", "tanggal", "waktu"]);
@@ -1093,11 +1093,24 @@ function recordView(x){
       links.push({url:url.href, label:folder ? "Buka Folder Berkas" : "Buka Berkas", key});
     }catch(e){}
   });
-  return {title, notes, status, date, links, archive};
+  const sortValue = activityTime(date);
+  return {title, notes, status, date, links, archive, sortValue};
+}
+function activityTime(value){
+  if(!value) return null;
+  const text = String(value).trim();
+  const local = text.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(?:[ ,T]+(\d{1,2})[:.](\d{2})(?:[:.](\d{2}))?)?$/);
+  if(local){
+    const [,day,month,year,hour="0",minute="0",second="0"] = local;
+    const d = new Date(+year,+month-1,+day,+hour,+minute,+second);
+    return d.getFullYear() === +year && d.getMonth() === +month-1 && d.getDate() === +day ? d.getTime() : null;
+  }
+  const n = Date.parse(text);
+  return Number.isFinite(n) ? n : null;
 }
 function getVisibleRecords(query = "", category = "all"){
   const term = query.trim().toLocaleLowerCase("id-ID");
-  return (Array.isArray(globalData?.riwayat) ? globalData.riwayat : []).map(recordView).filter(item => {
+  return (Array.isArray(globalData?.riwayat) ? globalData.riwayat : []).map(recordView).sort((a,b) => (b.sortValue ?? -Infinity) - (a.sortValue ?? -Infinity)).filter(item => {
     const type = item.archive ? "arsip" : "pengajuan";
     const search = [type,item.title,item.status,...item.notes.map(note => note[1])].join(" ").toLocaleLowerCase("id-ID");
     return (category === "all" || category === type) && (!term || search.includes(term));
@@ -1106,16 +1119,10 @@ function getVisibleRecords(query = "", category = "all"){
 function renderRiwayat(){
   const total = getVisibleRecords().length;
   document.getElementById("riwayatSlide").innerHTML = `
-    <div class="overview"><span class="overview-kicker">BERKAS SAYA</span>
-      <h1>Pengajuan &amp; Arsip</h1>
-      <p>Lihat catatan pengajuan. Klik nama arsip atau tombol Buka untuk melihat berkas.</p>
-      <div class="overview-bottom"><span>${total} pengajuan / arsip</span><button onclick="refreshData()" id="refreshBtn">↻ Perbarui</button></div>
-    </div>
-    <div id="refreshStatus" role="status" class="refresh-status"></div>
     <div class="table-tools"><label class="search-label" for="recordSearch">Cari pengajuan atau arsip<input id="recordSearch" type="search" placeholder="Ketik nama atau catatan…" oninput="renderRecordRows()"></label>
     <label class="filter-label" for="recordCategory">Jenis<select id="recordCategory" onchange="renderRecordRows()"><option value="all">Semua</option><option value="pengajuan">Pengajuan</option><option value="arsip">Arsip</option></select></label></div>
-    <p class="result-count" id="recordCount" role="status"></p>
-    <div class="table-wrap"><table class="records-table" aria-label="Daftar pengajuan dan arsip"><colgroup><col class="col-no"><col class="col-kind"><col class="col-note"><col class="col-folder"></colgroup><thead><tr><th scope="col">No</th><th scope="col">Jenis</th><th scope="col">Catatan</th><th scope="col">Folder</th></tr></thead><tbody id="recordRows"></tbody></table></div>`;
+    <div class="table-summary"><p class="result-count" id="recordCount" role="status"></p><button class="refresh-compact" onclick="refreshData()" id="refreshBtn">↻ Perbarui</button></div><span id="refreshStatus" role="status" class="sr-only"></span>
+    <div class="table-wrap"><table class="records-table" aria-label="Daftar pengajuan dan arsip"><colgroup><col class="col-no"><col class="col-kind"><col class="col-note"><col class="col-folder"></colgroup><thead><tr><th scope="col">No</th><th scope="col">Nama</th><th scope="col">Catatan</th><th scope="col">Berkas</th></tr></thead><tbody id="recordRows"></tbody></table></div>`;
   renderRecordRows();
 }
 function renderRecordRows(){
@@ -1124,10 +1131,7 @@ function renderRecordRows(){
   const rows = getVisibleRecords(query,category);
   document.getElementById("recordCount").textContent = rows.length + " data ditampilkan";
   document.getElementById("recordRows").innerHTML = rows.length ? rows.map((item,index) => {
-    const primary = item.links.find(link => /\/file\/|docs\.google\.com/.test(link.url)) || item.links[0];
-    return `<tr><td class="row-number">${index+1}</td><td><span class="type-badge ${item.archive ? "archive-badge" : ""}">${item.archive ? "Arsip" : "Pengajuan"}</span>
-      ${item.archive && primary ? `<a class="archive-title" href="${safeText(primary.url)}" target="_blank" rel="noopener noreferrer">${safeText(item.title)} <span aria-hidden="true">↗</span><small>Klik untuk buka</small></a>` : `<div class="table-title">${safeText(item.title)}</div>`}
-      ${item.date ? `<div class="table-date">${safeText(formatDate(item.date))}</div>` : ""}</td>
+    return `<tr><td class="row-number">${index+1}</td><td><div class="table-title">${safeText(item.title)}</div></td>
       <td>${item.status ? `<div class="table-status">Status: ${safeText(item.status)}</div>` : ""}${item.notes.length ? item.notes.map(([key,value]) => `<p class="table-note">${item.notes.length > 1 ? `<strong>${safeText(key)}: </strong>` : ""}${safeText(value)}</p>`).join("") : `<span class="muted">Belum ada catatan.</span>`}</td>
       <td>${item.links.length ? item.links.map(link => `<a class="table-open" href="${safeText(link.url)}" target="_blank" rel="noopener noreferrer" aria-label="${safeText(link.label + ': ' + item.title)}">Buka ↗<small>${link.label.includes("Folder") ? "Folder" : "Berkas"}</small></a>${item.links.length > 1 ? `<span class="link-caption">${safeText(link.key)}</span>` : ""}`).join("") : `<span class="unavailable">Belum tersedia</span>`}</td></tr>`;
   }).join("") : `<tr><td colspan="4" class="table-empty">${getVisibleRecords().length ? "Tidak ada data yang cocok. Coba kata lain atau pilih Semua." : `Belum ada pengajuan atau arsip.<button class="empty-service" onclick="goSlide(1)">Buka Layanan</button>`}</td></tr>`;
@@ -1150,6 +1154,14 @@ function openUrl(url){
   window.open(url,"_blank","noopener,noreferrer");
 }
 
+function toggleIdentity(){
+  const panel = document.getElementById("identityPanel");
+  const hidden = panel.classList.toggle("hidden");
+  const btn = document.getElementById("identityToggle");
+  btn.textContent = hidden ? "Tampilkan identitas" : "Sembunyikan identitas";
+  btn.setAttribute("aria-expanded",String(!hidden));
+  document.getElementById("dropdown").classList.remove("show");
+}
 function toggleDropdown(){
   document.getElementById("dropdown").classList.toggle("show");
 }
@@ -1166,6 +1178,9 @@ function logout(){
   }
 
   globalData = null;
+  document.getElementById("identityPanel").classList.add("hidden");
+  document.getElementById("identityToggle").textContent = "Tampilkan identitas";
+  document.getElementById("identityToggle").setAttribute("aria-expanded","false");
 
   document.getElementById("dropdown").classList.remove("show");
   document.getElementById("dashboard").style.display = "none";
