@@ -348,76 +348,6 @@ a{
   background:var(--surface-2);
 }
 
-/* MESSAGE */
-.message-panel{
-  margin-bottom:14px;
-}
-
-.message-header{
-  width:100%;
-  border:none;
-  background:linear-gradient(135deg,var(--primary),var(--primary-2));
-  color:#fff;
-  padding:14px 16px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  text-align:left;
-  box-shadow:0 9px 22px rgba(15,76,129,.12);
-}
-
-.message-title{
-  font-size:14px;
-  font-weight:800;
-}
-
-.message-count{
-  min-width:26px;
-  height:26px;
-  padding:0 8px;
-  border-radius:999px;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.18);
-  font-size:12px;
-  font-weight:800;
-}
-
-.message-box{
-  display:none;
-  margin-top:8px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:6px 14px;
-  max-height:230px;
-  overflow:auto;
-  box-shadow:var(--shadow-soft);
-}
-
-.message-box.show{
-  display:block;
-}
-
-.message-card{
-  padding:12px 0;
-  border-bottom:1px solid #eef1f4;
-  font-size:13px;
-  line-height:1.55;
-}
-
-.message-card:last-child{
-  border-bottom:none;
-}
-
-.message-time{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:11px;
-}
-
 /* TABS MOBILE */
 .tabs{
   display:flex;
@@ -705,9 +635,6 @@ a{
     min-height:132px;
   }
 
-  .profile-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
 }
 
 @media (max-width:640px){
@@ -777,7 +704,6 @@ a{
 .file-button{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:48px;padding:13px 14px;background:#eaf4fb;color:#0f4c81;border:1px solid #d6e8f5;border-radius:12px;text-decoration:none;font-size:13px;font-weight:800;margin-top:12px;overflow-wrap:anywhere}
 .file-button span{margin-left:auto}.file-button small{font-size:11px;font-weight:400;max-width:100%;overflow-wrap:anywhere}
 .empty-state p{line-height:1.6;margin-top:10px}button:disabled{opacity:.65;cursor:wait}button:focus-visible,a:focus-visible{outline:3px solid #28a7d4;outline-offset:3px}
-.message-box{max-height:none}.message-card{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:640px){.wrapper{padding:16px 12px calc(24px + env(safe-area-inset-bottom))}.record-card{padding:16px}.topbar{margin-bottom:18px}.overview{padding:20px}.overview h1{font-size:23px}.tab{padding:10px 7px}.menu{min-height:138px}.menu-title{line-height:1.4}}
 @media(min-width:1024px){.record-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
@@ -865,7 +791,6 @@ a{
           </div>
         </div>
 
-        <div id="messageContainer"></div>
 
         <div class="tabs">
           <button class="tab active" onclick="goSlide(0)">Pengajuan &amp; Arsip</button>
@@ -1059,50 +984,9 @@ async function fetchData(nip){
    RENDER SEMUA
 ========================================================= */
 function renderAll(){
-  renderPesan();
   renderLayanan();
   renderRiwayat();
 
-}
-
-/* =========================================================
-   PESAN
-========================================================= */
-function renderPesan(){
-  const container = document.getElementById("messageContainer");
-  const pesan = Array.isArray(globalData?.pesan) ? globalData.pesan : [];
-
-  if(!pesan.length){
-    container.innerHTML = "";
-    return;
-  }
-
-  let html = `
-    <div class="message-panel">
-      <button class="message-header" onclick="toggleMsg()">
-        <div>
-          <div class="message-title">Pesan dari Bagian Kepegawaian</div>
-        </div>
-        <div class="message-count">${pesan.length}</div>
-      </button>
-      <div class="message-box show" id="msgBox">
-  `;
-
-  pesan.forEach(m=>{
-    html += `
-      <div class="message-card">
-        <div>${safeText(m.text)}</div>
-        <div class="message-time">${safeText(m.time)}</div>
-      </div>
-    `;
-  });
-
-  html += `</div></div>`;
-  container.innerHTML = html;
-}
-
-function toggleMsg(){
-  document.getElementById("msgBox")?.classList.toggle("show");
 }
 
 /* =========================================================
@@ -1255,7 +1139,6 @@ function logout(){
   document.getElementById("dropdown").classList.remove("show");
   document.getElementById("dashboard").style.display = "none";
   document.getElementById("loginBox").style.display = "grid";
-  document.getElementById("messageContainer").innerHTML = "";
   document.getElementById("layananSlide").innerHTML = "";
   document.getElementById("riwayatSlide").innerHTML = "";
 
